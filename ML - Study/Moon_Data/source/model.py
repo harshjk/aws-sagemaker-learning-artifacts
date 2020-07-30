@@ -15,6 +15,17 @@ class SimpleNet(nn.Module):
         super(SimpleNet, self).__init__()
         
         # define all layers, here
+        self.input_dim = input_dim
+        #Layer 1
+        self.fc1 = nn.Linear(input_dim, hidden_dim)
+        #Layer 2
+        self.fc2 = nn.Linear(hidden_dim, hidden_dim)
+        #Layer 3
+        self.fc3 = nn.Linear(hidden_dim, output_dim)
+        # dropout layer (p=0.3)
+        # dropout prevents overfitting of data
+        self.dropout = nn.Dropout(0.3)
+        self.sig = nn.Sigmoid()
         
     
     ## TODO: Define the feedforward behavior of the network
@@ -25,4 +36,14 @@ class SimpleNet(nn.Module):
          '''
         # your code, here
         
-        return x
+        # add hidden layer, with relu activation function
+        x = F.relu(self.fc1(x))
+        # add dropout layer
+        x = self.dropout(x)
+        # add hidden layer, with relu activation function
+        x = F.relu(self.fc2(x))
+        # add dropout layer
+        x = self.dropout(x)
+        # add output layer
+        x = self.fc3(x)
+        return self.sig(x)
